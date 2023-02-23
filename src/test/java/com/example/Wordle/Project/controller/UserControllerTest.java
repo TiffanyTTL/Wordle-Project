@@ -1,5 +1,8 @@
 package com.example.Wordle.Project.controller;
 
+import com.example.Wordle.Project.model.User;
+import com.example.Wordle.Project.repository.UserRepository;
+import com.example.Wordle.Project.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +18,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -35,6 +38,9 @@ public class UserControllerTest {
 
     @Mock
     User user;
+
+    @Mock
+    UserController userController;
 
     @Mock
     RequestAttributes attributes;
