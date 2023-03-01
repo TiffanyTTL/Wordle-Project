@@ -1,10 +1,7 @@
 package com.example.wordle.project.controller;
 
-import com.example.wordle.project.model.User;
 import com.example.wordle.project.model.WordOfTheDay;
-import com.example.wordle.project.repository.UserRepository;
 import com.example.wordle.project.repository.WordOfTheDayRepository;
-import com.example.wordle.project.service.UserService;
 import com.example.wordle.project.service.WordService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -70,7 +67,7 @@ public class WordControllerTest {
     public void createWordsForWordleGameTest() throws Exception {
         // given precondition
         WordOfTheDay mockWordOfTheDay = new WordOfTheDay();
-        mockWordOfTheDay.setWord("MAGIC");
+        mockWordOfTheDay.setWordOfTheDay("MAGIC");
         mockWordOfTheDay.setDate(LocalDate.of(2023,2,28));
         given(wordService.createWord(Mockito.any())).willReturn(new WordOfTheDay("MAGIC", LocalDate.of(2023,2,28)));
         //action I will be testing
@@ -83,6 +80,24 @@ public class WordControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.word").value("MAGIC"));
+
+    }
+
+    @Test
+    public void getWordOfTheDayByDateTest() throws Exception{
+        WordOfTheDay wordOfTheDay = new WordOfTheDay();
+        wordOfTheDay.setWordOfTheDay("FUNNY");
+        wordOfTheDay.setDate(LocalDate.of(2023,3,1));
+        given(wordService.getWordOfTheDayByDate(LocalDate.of(2023,3,1))).willReturn(wordOfTheDay);
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/word/wordOfTheDay/2023-03-01")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(wordOfTheDay))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.word").value("FUNNY"));
+
 
     }
 }

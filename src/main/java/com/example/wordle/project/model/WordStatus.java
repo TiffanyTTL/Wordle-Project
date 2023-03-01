@@ -1,4 +1,4 @@
-package com.example.Wordle.Project.model;
+package com.example.wordle.project.model;
 
 /**
  * WordStatus model enum.

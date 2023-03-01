@@ -31,7 +31,7 @@ public class WordController {
 
   Logger logger = LoggerFactory.getLogger(WordController.class);
   /**
-   * Post request method to create word of the day.
+   * Post request method to create wordOfTheDay of the day.
    */
   @PostMapping("/createWordOfTheDay")
   @ResponseStatus(HttpStatus.CREATED)
@@ -41,7 +41,7 @@ public class WordController {
   }
 
   /**
-   * Get request method to get the word of the day.
+   * Get request method to get the wordOfTheDay of the day.
    */
   @GetMapping("/wordOfTheDay/{date}")
   @ResponseStatus(HttpStatus.OK)

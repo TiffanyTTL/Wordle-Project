@@ -1,6 +1,6 @@
-package com.example.Wordle.Project.repository;
+package com.example.wordle.project.repository;
 
-import com.example.Wordle.Project.model.User;
+import com.example.wordle.project.model.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,8 +1,10 @@
 package com.example.wordle.project.controller;
 
 import com.example.wordle.project.model.User;
+import com.example.wordle.project.model.WordOfTheDay;
 import com.example.wordle.project.repository.UserRepository;
 import com.example.wordle.project.service.UserService;
+import com.example.wordle.project.service.WordService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +25,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import java.time.LocalDate;
+
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -40,6 +44,9 @@ public class UserControllerTest {
 
     @Mock
     UserService userService;
+
+    @Mock
+    WordService wordService;
 
     @MockBean
     UserRepository userRepository;
@@ -82,6 +89,10 @@ public class UserControllerTest {
 
     }
 
+    @Test
+    public void submitGuessTest() throws Exception {
+        //
+    }
 
 }
 

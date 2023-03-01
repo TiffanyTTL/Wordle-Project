@@ -1,4 +1,4 @@
-package com.example.Wordle.Project.model;
+package com.example.wordle.project.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;

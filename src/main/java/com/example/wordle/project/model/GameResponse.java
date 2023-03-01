@@ -1,4 +1,4 @@
-package com.example.Wordle.Project.model;
+package com.example.wordle.project.model;
 
 import java.util.Map;
 
@@ -12,14 +12,15 @@ public class GameResponse {
    */
   private int currentTries;
   private String wordGuess;
-  private User userEmailAddress;
+  private String userEmailAddress;
   private GameStatus gameStatus;
   private Map<String, WordStatus> wordStatusMap;
 
   /**
    * GameResponse constructor.
    */
-  public GameResponse(int currentTries, String wordGuess, User userEmailAddress, GameStatus gameStatus,
+  public GameResponse(int currentTries, String wordGuess, String userEmailAddress,
+                      GameStatus gameStatus,
                       Map<String, WordStatus> wordStatusMap) {
     super();
     this.currentTries = currentTries;
@@ -46,11 +47,11 @@ public class GameResponse {
     this.wordGuess = wordGuess;
   }
 
-  public User getUserEmailAddress() {
+  public String getUserEmailAddress() {
     return userEmailAddress;
   }
 
-  public void setUserEmailAddress(User userEmailAddress) {
+  public void setUserEmailAddress(String userEmailAddress) {
     this.userEmailAddress = userEmailAddress;
   }
 
