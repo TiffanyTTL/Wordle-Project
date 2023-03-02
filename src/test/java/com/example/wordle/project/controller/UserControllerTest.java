@@ -1,11 +1,13 @@
 package com.example.wordle.project.controller;
 
+import com.example.wordle.project.model.Game;
 import com.example.wordle.project.model.User;
-import com.example.wordle.project.model.WordOfTheDay;
 import com.example.wordle.project.repository.UserRepository;
+import com.example.wordle.project.requestbody.SubmitGuessRequestBody;
 import com.example.wordle.project.service.UserService;
 import com.example.wordle.project.service.WordService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +29,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 
 import java.time.LocalDate;
 
+import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -42,13 +45,13 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Mock
+    @InjectMocks
     UserService userService;
 
     @Mock
     WordService wordService;
 
-    @MockBean
+    @Mock
     UserRepository userRepository;
 
     @InjectMocks
@@ -62,6 +65,9 @@ public class UserControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Mock
+    Game game;
 
     @Before
     public void setUp() {
@@ -90,10 +96,30 @@ public class UserControllerTest {
     }
 
     @Test
-    public void submitGuessTest() throws Exception {
-        //
-    }
+    public void ifUserHasOver5Trys_ThrowRuntimeException_SuccessTest() {
+    SubmitGuessRequestBody submitGuessRequestBody = new SubmitGuessRequestBody();
+    submitGuessRequestBody.setGuessResponse("FUNNY");
+    submitGuessRequestBody.setUserEmailAddress("tiffany@wordle.com");
+    submitGuessRequestBody.setDate(LocalDate.of(2023,3,1));
+        UserService userService = new UserService();
+        userService.submitGuessResponse(submitGuessRequestBody);
+        userService.submitGuessResponse(submitGuessRequestBody);
+        userService.submitGuessResponse(submitGuessRequestBody);
+        userService.submitGuessResponse(submitGuessRequestBody);
+        userService.submitGuessResponse(submitGuessRequestBody);
+        User user = new User();
+        user.setUserEmailAddress("tiffany@wordle.com");
+        Mockito.when(userRepository.findUserByUserEmailAddress(submitGuessRequestBody.getUserEmailAddress()));
+        Exception exception = Assert.assertThrows(RuntimeException.class, () -> {
+            userService.submitGuessResponse(submitGuessRequestBody);
+        });
+        {
+            String expectedMessage = "Game finished, please play again";
+            String actualMessage = exception.getMessage();
 
+            assertTrue(actualMessage.contains(expectedMessage));
+        }
+    }
 }
 
 

@@ -85,15 +85,18 @@ public class WordControllerTest {
 
     @Test
     public void getWordOfTheDayByDateTest() throws Exception{
+        // given precondition
         WordOfTheDay wordOfTheDay = new WordOfTheDay();
         wordOfTheDay.setWordOfTheDay("FUNNY");
         wordOfTheDay.setDate(LocalDate.of(2023,3,1));
         given(wordService.getWordOfTheDayByDate(LocalDate.of(2023,3,1))).willReturn(wordOfTheDay);
+        //action I will be testing
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/word/wordOfTheDay/2023-03-01")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(wordOfTheDay))
                         .accept(MediaType.APPLICATION_JSON))
+                //verify the result
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.word").value("FUNNY"));

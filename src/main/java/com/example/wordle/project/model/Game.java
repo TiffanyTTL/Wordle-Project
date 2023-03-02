@@ -18,6 +18,10 @@ public class Game {
     this.currentTries = currentTries;
   }
 
+  public Game(){
+
+  }
+
   public String getWord() {
     return word;
   }

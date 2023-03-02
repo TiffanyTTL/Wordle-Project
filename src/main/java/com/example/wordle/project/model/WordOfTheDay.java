@@ -1,9 +1,7 @@
 package com.example.wordle.project.model;
-
-import java.time.LocalDate;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.mongodb.core.mapping.Document;
+import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 

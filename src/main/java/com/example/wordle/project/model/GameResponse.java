@@ -1,6 +1,7 @@
 package com.example.wordle.project.model;
 
-import java.util.Map;
+import com.example.wordle.project.requestbody.SubmitGuessRequestBody;
+
 
 /**
  * GameResponse model class.
@@ -12,23 +13,28 @@ public class GameResponse {
    */
   private int currentTries;
   private String wordGuess;
-  private String userEmailAddress;
   private GameStatus gameStatus;
-  private Map<String, WordStatus> wordStatusMap;
+  private CharacterStatus characterStatus;
 
+  public GameResponse() {
+  }
   /**
    * GameResponse constructor.
    */
-  public GameResponse(int currentTries, String wordGuess, String userEmailAddress,
-                      GameStatus gameStatus,
-                      Map<String, WordStatus> wordStatusMap) {
+
+  public GameResponse(int currentTries, String wordGuess,
+                      CharacterStatus characterStatus, GameStatus gameStatus) {
     super();
     this.currentTries = currentTries;
     this.wordGuess = wordGuess;
-    this.userEmailAddress = userEmailAddress;
+    this.characterStatus = characterStatus;
     this.gameStatus = gameStatus;
-    this.wordStatusMap = wordStatusMap;
 
+
+  }
+
+  public GameResponse(int currentTry, SubmitGuessRequestBody submitGuessRequestBody,
+                      CharacterStatus correct, GameStatus win) {
   }
 
   public int getCurrentTries() {
@@ -47,12 +53,12 @@ public class GameResponse {
     this.wordGuess = wordGuess;
   }
 
-  public String getUserEmailAddress() {
-    return userEmailAddress;
+  public CharacterStatus getCharacterStatus() {
+    return characterStatus;
   }
 
-  public void setUserEmailAddress(String userEmailAddress) {
-    this.userEmailAddress = userEmailAddress;
+  public void setCharacterStatus(CharacterStatus characterStatus) {
+    this.characterStatus = characterStatus;
   }
 
   public GameStatus getGameStatus() {
@@ -63,12 +69,5 @@ public class GameResponse {
     this.gameStatus = gameStatus;
   }
 
-  public Map<String, WordStatus> getWordStatusMap() {
-    return wordStatusMap;
-  }
-
-  public void setWordStatusMap(Map<String, WordStatus> wordStatusMap) {
-    this.wordStatusMap = wordStatusMap;
-  }
 
 }
