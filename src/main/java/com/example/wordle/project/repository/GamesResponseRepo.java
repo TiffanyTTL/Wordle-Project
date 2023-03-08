@@ -1,7 +1,6 @@
 package com.example.wordle.project.repository;
 
-
-import com.example.wordle.project.model.User;
+import com.example.wordle.project.model.GameResponse;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,8 +8,7 @@ import org.springframework.stereotype.Repository;
  * User repository class.
  */
 @Repository
-public interface UserRepository extends MongoRepository<User, String> {
+public interface GamesResponseRepo extends MongoRepository<GameResponse, String> {
 
-  User findUserByUserEmailAddress(String userEmailAddress);
-
+    GameResponse findGameResponseByWordGuess(String wordGuess);
 }

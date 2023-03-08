@@ -4,22 +4,24 @@ import java.time.LocalDate;
 
 public class SubmitGuessRequestBody {
 
-    public SubmitGuessRequestBody(String guessResponse, String userEmailAddress, LocalDate date) {
-        this.guessResponse = guessResponse;
-        this.userEmailAddress = userEmailAddress;
-        this.date = date;
-    }
 
     public SubmitGuessRequestBody() {
 
     }
 
     public String guessResponse;
+    public String userEmailAddress;
+    public LocalDate date;
+
+    public SubmitGuessRequestBody(String guessResponse, String userEmailAddress, LocalDate date) {
+        this.guessResponse = guessResponse;
+        this.userEmailAddress = userEmailAddress;
+        this.date = date;
+    }
 
     public String getGuessResponse() {
         return guessResponse;
     }
-
     public void setGuessResponse(String guessResponse) {
         this.guessResponse = guessResponse;
     }
@@ -40,7 +42,5 @@ public class SubmitGuessRequestBody {
         this.date = date;
     }
 
-    public String userEmailAddress;
-    public LocalDate date;
 
 }

@@ -1,16 +1,23 @@
 package com.example.wordle.project.model;
 
 import com.example.wordle.project.requestbody.SubmitGuessRequestBody;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 
 /**
  * GameResponse model class.
  */
+@Document("GameResponse")
 public class GameResponse {
 
   /**
    * GameResponse fields.
    */
+  @Id
+  @Indexed(unique = true)
+  private String gameResponseId;
   private int currentTries;
   private String wordGuess;
   private GameStatus gameStatus;
@@ -22,30 +29,32 @@ public class GameResponse {
    * GameResponse constructor.
    */
 
-  public GameResponse(int currentTries, String wordGuess,
-                      CharacterStatus characterStatus, GameStatus gameStatus) {
+  public GameResponse(int currentTries, String wordGuess, GameStatus gameStatus) {
     super();
     this.currentTries = currentTries;
     this.wordGuess = wordGuess;
-    this.characterStatus = characterStatus;
     this.gameStatus = gameStatus;
 
 
+
   }
 
-  public GameResponse(int currentTry, SubmitGuessRequestBody submitGuessRequestBody,
-                      CharacterStatus correct, GameStatus win) {
+  public GameResponse( SubmitGuessRequestBody submitGuessRequestBody,
+                       GameStatus gameStatus, CharacterStatus characterStatus) {
+    this.wordGuess = submitGuessRequestBody.getGuessResponse();
+    this.gameStatus = gameStatus;
+    this.characterStatus = characterStatus;
   }
 
   public int getCurrentTries() {
-    return currentTries;
+    return currentTries ++ ;
   }
 
   public void setCurrentTries(int currentTries) {
     this.currentTries = currentTries;
   }
 
-  public String getWordGuessWord() {
+  public String getWordGuess() {
     return wordGuess;
   }
 
@@ -53,13 +62,6 @@ public class GameResponse {
     this.wordGuess = wordGuess;
   }
 
-  public CharacterStatus getCharacterStatus() {
-    return characterStatus;
-  }
-
-  public void setCharacterStatus(CharacterStatus characterStatus) {
-    this.characterStatus = characterStatus;
-  }
 
   public GameStatus getGameStatus() {
     return gameStatus;

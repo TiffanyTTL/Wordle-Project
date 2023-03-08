@@ -79,7 +79,7 @@ public class WordControllerTest {
                 //verify the result
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.word").value("MAGIC"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.wordOfTheDay").value("MAGIC"));
 
     }
 
@@ -99,7 +99,7 @@ public class WordControllerTest {
                 //verify the result
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.word").value("FUNNY"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.wordOfTheDay").value("FUNNY"));
 
 
     }

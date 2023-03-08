@@ -26,10 +26,15 @@ public class User {
     this.userEmailAddress = userEmailAddress;
   }
 
+
   public String getUserEmailAddress(String userEmailAddress) {
     return this.userEmailAddress;
   }
 
+  public String getUserEmailAddress(){
+    return this.userEmailAddress;
+
+  }
   public void setUserEmailAddress(String userEmailAddress) {
     this.userEmailAddress = userEmailAddress;
   }
