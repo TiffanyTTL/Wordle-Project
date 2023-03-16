@@ -13,4 +13,5 @@ import java.time.LocalDate;
 @Repository
 public interface WordOfTheDayRepository extends MongoRepository<WordOfTheDay, String> {
     WordOfTheDay findWordOfTheDayByDate(LocalDate wordOfTheDay);
+
 }

@@ -50,9 +50,6 @@ public class Game {
     return currentTries;
   }
 
-  public void currentAttempts(){
-    this.currentTries++;
-  }
 
   public void setCurrentTries(int currentTries) {
     this.currentTries = currentTries;

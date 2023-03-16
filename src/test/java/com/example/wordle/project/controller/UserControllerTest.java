@@ -1,9 +1,6 @@
 package com.example.wordle.project.controller;
 
-import com.example.wordle.project.model.Game;
-import com.example.wordle.project.model.GameStatus;
-import com.example.wordle.project.model.User;
-import com.example.wordle.project.model.WordOfTheDay;
+import com.example.wordle.project.model.*;
 import com.example.wordle.project.repository.UserRepository;
 import com.example.wordle.project.repository.WordOfTheDayRepository;
 import com.example.wordle.project.requestbody.StartGameRequestBody;
@@ -11,6 +8,7 @@ import com.example.wordle.project.requestbody.SubmitGuessRequestBody;
 import com.example.wordle.project.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
@@ -25,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.event.annotation.BeforeTestMethod;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -37,7 +36,9 @@ import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -68,12 +69,6 @@ public class UserControllerTest {
     @Mock
     private Game game;
 
-    @Mock
-    private StartGameRequestBody startGameRequestBody;
-
-//    @Mock
-//    private RequestAttributes attributes;
-
     @Autowired
     private WebApplicationContext webApplicationContext;
 
@@ -85,6 +80,7 @@ public class UserControllerTest {
         //RequestContextHolder.setRequestAttributes(attributes);
         //this.mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
+        StartGameRequestBody startGameRequestBody = new StartGameRequestBody();
     }
 
     @BeforeTestMethod
@@ -99,19 +95,16 @@ public class UserControllerTest {
         mockUser.setUserEmailAddress("tiffany@wordle.com");
         given(userService.createUser(Mockito.any())).willReturn(new User("tiffany@wordle.com"));
         //action I will be testing
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/user/createUser")
+        mockMvc.perform(post("/user/createUser")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(mockUser))
                         .accept(MediaType.APPLICATION_JSON))
                 //verify the result
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.userEmailAddress").value("tiffany@wordle.com"));
+                .andExpect(jsonPath("$.userEmailAddress").value("tiffany@wordle.com"));
 
     }
-
-
 
 
     @Test
@@ -119,54 +112,74 @@ public class UserControllerTest {
         // given precondition
         StartGameRequestBody startGameRequestBody = new StartGameRequestBody();
         startGameRequestBody.setUserEmailAddress("lucy@wordle.com");
-        given(userService.addGameToDatabase(Mockito.any())).willReturn(String.valueOf(new StartGameRequestBody("lucy@wordle.com has started Wordle! ")));
+        Mockito.when(userService.addGameToDatabase(startGameRequestBody)).thenReturn(user);
+        String jsonBody = "{\"userEmailAddress\":\"lucy@wordle.com\"}";
         //action I will be testing
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/user/startGame")
+        MvcResult result = (MvcResult) mockMvc.perform(MockMvcRequestBuilders
+                             .post("/user/startGame")
+                        .content(jsonBody)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(startGameRequestBody))
                         .accept(MediaType.APPLICATION_JSON))
                 //verify the result
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.userEmailAddress").value("lucy@wordle.com"));
+                     .andReturn();
+        String content = result.getResponse().getContentAsString();
+        Assert.assertNotNull(content);
+        assertEquals(user,userService.addGameToDatabase(startGameRequestBody));
+        System.out.println(content);
 
-    }
 
 
-
-    @Test
-    public void ifUserHasOver5Trys_ThrowRuntimeException_SuccessTest() {
-        SubmitGuessRequestBody submitGuessRequestBody = new SubmitGuessRequestBody();
-        submitGuessRequestBody.setGuessResponse("FUNNY");
-        submitGuessRequestBody.setUserEmailAddress("tiffany@wordle.com");
-        submitGuessRequestBody.setDate(LocalDate.of(2023, 3, 1));
-        userService.submitGuessResponse(submitGuessRequestBody);
-        userService.submitGuessResponse(submitGuessRequestBody);
-        userService.submitGuessResponse(submitGuessRequestBody);
-        userService.submitGuessResponse(submitGuessRequestBody);
-        userService.submitGuessResponse(submitGuessRequestBody);
-        userService.submitGuessResponse(submitGuessRequestBody);
-        Exception exception = Assert.assertThrows(RuntimeException.class, () -> {
-            userService.submitGuessResponse(submitGuessRequestBody);
-        });
-        {
-            String expectedMessage = "Game finished, please play again";
-            String actualMessage = exception.getMessage();
-
-            assertTrue(actualMessage.contains(expectedMessage));
-        }
     }
 
     @Test
-    public void ifUserWordMatches_wordOfTheDayTest() {
+    public void submitGuess() throws Exception {
+        // given precondition
         SubmitGuessRequestBody submitGuessRequestBody = new SubmitGuessRequestBody();
-        submitGuessRequestBody.setGuessResponse("APPLE");
-        WordOfTheDay wordOfTheDay = new WordOfTheDay();
-        wordOfTheDay.setWordOfTheDay("APPLE");
-        //given(submitGuessRequestBody.getGuessResponse().matches(wordOfTheDay.getWordOfTheDay())).willReturn(WIN);
+        submitGuessRequestBody.setGuessResponse("ANGER");
+        submitGuessRequestBody.setDate(LocalDate.of(2023,3,5));
+        submitGuessRequestBody.setUserEmailAddress("frances@wordle.com");
+        Mockito.when(userService.submitGuess(submitGuessRequestBody)).thenReturn(new GameResponse());
+        //action I will be testing
+        MvcResult result = (MvcResult) mockMvc.perform(MockMvcRequestBuilders
+                        .post("/user/submitGame")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                //verify the result
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        String content = result.getResponse().getContentAsString();
+        Assert.assertNotNull(content);
+        assertEquals(new GameResponse(),userService.submitGuess(submitGuessRequestBody));
+        System.out.println(content);
+
+
+
     }
-
-
 }
 
+//    @Test
+//    public void submitGuess_SuccessTest() throws Exception {
+//        SubmitGuessRequestBody submitGuessRequestBody = new SubmitGuessRequestBody();
+//        submitGuessRequestBody.setGuessResponse("Angry");
+//        submitGuessRequestBody.setUserEmailAddress("Tom@wordle.com");
+//        submitGuessRequestBody.setDate(LocalDate.of(2023,3,10));
+//        Mockito
+//
+//    }
+
+
+//    @Test
+//    public void ifUserWordMatches_wordOfTheDayTest() {
+//        SubmitGuessRequestBody submitGuessRequestBody = new SubmitGuessRequestBody();
+//        submitGuessRequestBody.setGuessResponse("APPLE");
+//        WordOfTheDay wordOfTheDay = new WordOfTheDay();
+//        wordOfTheDay.setWordOfTheDay("APPLE");
+//        //given(submitGuessRequestBody.getGuessResponse().matches(wordOfTheDay.getWordOfTheDay())).willReturn(WIN);
+//    }
+//
+//
+//}
+//

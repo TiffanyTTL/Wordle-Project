@@ -39,10 +39,9 @@ public class GameResponse {
 
   }
 
-  public GameResponse( SubmitGuessRequestBody submitGuessRequestBody,
-                       GameStatus gameStatus, CharacterStatus characterStatus) {
-    this.wordGuess = submitGuessRequestBody.getGuessResponse();
-    this.gameStatus = gameStatus;
+  public GameResponse(int currentTries, String wordGuess, CharacterStatus characterStatus) {
+    this.currentTries = currentTries;
+    this.wordGuess = wordGuess;
     this.characterStatus = characterStatus;
   }
 

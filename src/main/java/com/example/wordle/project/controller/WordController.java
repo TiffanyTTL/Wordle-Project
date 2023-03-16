@@ -49,4 +49,5 @@ public class WordController {
     return wordService.getWordOfTheDayByDate(date);
   }
 
+
 }

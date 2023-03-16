@@ -54,22 +54,24 @@ public class UserController {
     return userService.createUser(user);
   }
 
-  /**
-   * Post request method for the user to submit their guess.
-   */
-  @PostMapping("/submitGuess")
-  @ResponseStatus(HttpStatus.CREATED)
-  public GameResponse submitGuess(@RequestBody SubmitGuessRequestBody submitGuessRequestBody) {
-    return userService.submitGuessResponse(submitGuessRequestBody);
-  }
 
   /**
    * Post request method for the user to start the game.
    */
   @PostMapping("/startGame")
   @ResponseStatus(HttpStatus.CREATED)
-  public String startGame(@RequestBody StartGameRequestBody startGameRequestBody) {
+    public User startGame(StartGameRequestBody startGameRequestBody) {
     return userService.addGameToDatabase(startGameRequestBody);
+  }
+
+
+  /**
+   * Post request method for the user to start the game.
+   */
+  @PostMapping("/submitGuess")
+  @ResponseStatus(HttpStatus.OK)
+  public GameResponse submitGuess(SubmitGuessRequestBody submitGuessRequestBody) {
+    return userService.submitGuess(submitGuessRequestBody);
   }
 
 

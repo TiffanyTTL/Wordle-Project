@@ -1,5 +1,6 @@
 package com.example.wordle.project.controller;
 
+import com.example.wordle.project.model.User;
 import com.example.wordle.project.model.WordOfTheDay;
 import com.example.wordle.project.repository.WordOfTheDayRepository;
 import com.example.wordle.project.service.WordService;
