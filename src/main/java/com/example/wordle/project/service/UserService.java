@@ -39,6 +39,8 @@ public class UserService {
 
   WordOfTheDay wordOfTheDay;
 
+  SubmitGuessRequestBody submitGuessRequestBody;
+
 
   Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -53,6 +55,7 @@ public class UserService {
     this.wordOfTheDayRepository = wordOfTheDayRepository;
     this.gameHistoryRepository = gameHistoryRepository;
     startGameRequestBody = new StartGameRequestBody();
+    submitGuessRequestBody = new SubmitGuessRequestBody();
     user = new User();
     game = new Game();
     wordOfTheDay = new WordOfTheDay();
@@ -98,26 +101,26 @@ public class UserService {
 
   public GameResponse submitGuess(SubmitGuessRequestBody submitGuessRequestBody) {
 
-   WordOfTheDay wordOfTheDay = wordOfTheDayRepository.findWordOfTheDayByDate(LocalDate.now());
+    wordOfTheDay = wordOfTheDayRepository.findWordOfTheDayByDate(LocalDate.now());
     String findUsersGuess = submitGuessRequestBody.getGuessResponse();
 
       if(findUsersGuess.length() != 5) {
         return new GameResponse(game.getCurrentTries(), game.getWord(), GameStatus.LOSE);
       }
 
-      if(!wordOfTheDay.contains(findUsersGuess)) {
+      if(!wordOfTheDay.getWordOfTheDay().contains(findUsersGuess)) {
         return new GameResponse(game.getCurrentTries(), game.getWord(), GameStatus.LOSE);
       }
 
-      CharacterStatus[] result = new CharacterStatus[wordOfTheDay.length()];
-      for(int iter = 0 ; iter < findUsersGuess.length() ; iter++) {
+      CharacterStatus[] result = new CharacterStatus[wordOfTheDay.getWordOfTheDay().length()];
+      for(int iter = 0 ; iter < findUsersGuess.length(); iter++) {
         char currentChar = findUsersGuess.charAt(iter);
-        if(currentChar == wordOfTheDay.charAt(iter)) {
+        if(currentChar == wordOfTheDay.getWordOfTheDay().charAt(iter)) {
           result[iter] = CharacterStatus.GREEN; //if correct green
           logger.info("success");
           continue;
         }
-        if(wordOfTheDay.indexOf(currentChar) > -1) {
+        if(wordOfTheDay.getWordOfTheDay().indexOf(currentChar) > -1) {
           result[iter] = CharacterStatus.YELLOW;
           continue;
         }
@@ -125,7 +128,11 @@ public class UserService {
       }
       return new GameResponse(game.getCurrentTries(), game.getWord(), GameStatus.LOSE);
     }
+
+  public GameHistory getUsersGameHistory(String userEmailAddress) {
+    return gameHistoryRepository.findGameHistoriesByUserEmailAddress(userEmailAddress);
   }
+}
 
 
 

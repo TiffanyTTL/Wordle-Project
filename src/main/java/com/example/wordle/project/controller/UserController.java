@@ -1,5 +1,6 @@
 package com.example.wordle.project.controller;
 
+import com.example.wordle.project.model.GameHistory;
 import com.example.wordle.project.model.GameResponse;
 import com.example.wordle.project.model.User;
 import com.example.wordle.project.model.WordOfTheDay;
@@ -74,6 +75,14 @@ public class UserController {
     return userService.submitGuess(submitGuessRequestBody);
   }
 
-
+  /**
+   * Get request method to get the wordOfTheDay of the day.
+   */
+  @GetMapping("/user/{userEmailAddress}")
+  @ResponseStatus(HttpStatus.OK)
+  public GameHistory getUsersGameHistory(@PathVariable String userEmailAddress) {
+    logger.info(("User history returned"));
+    return userService.getUsersGameHistory(userEmailAddress);
+  }
 
 }

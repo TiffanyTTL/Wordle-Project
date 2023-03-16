@@ -77,8 +77,6 @@ public class UserControllerTest {
 
     @BeforeEach
     public void setUp() {
-        //RequestContextHolder.setRequestAttributes(attributes);
-        //this.mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
         StartGameRequestBody startGameRequestBody = new StartGameRequestBody();
     }
@@ -128,9 +126,6 @@ public class UserControllerTest {
         Assert.assertNotNull(content);
         assertEquals(user,userService.addGameToDatabase(startGameRequestBody));
         System.out.println(content);
-
-
-
     }
 
     @Test
@@ -158,7 +153,25 @@ public class UserControllerTest {
 
 
     }
-}
+
+    public void getUsersGameHistorySuccess_Test() throws Exception {
+        // given precondition
+        GameHistory gameHistory = new GameHistory();
+        gameHistory.setUserEmailAddress("tiffany@hotmail.com");
+        gameHistory.setWordGuess(LocalDate.now());
+        gameHistory.setGamePlays(19);
+        given(userService.getUsersGameHistory("tiffany@wordle.com")).willReturn(gameHistory);
+        //action I will be testing
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/user/tiffany@wordle.com")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(gameHistory))
+                        .accept(MediaType.APPLICATION_JSON))
+                //verify the result
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+    }
 
 //    @Test
 //    public void submitGuess_SuccessTest() throws Exception {
