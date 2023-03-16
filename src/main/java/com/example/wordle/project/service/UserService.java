@@ -58,11 +58,10 @@ public class UserService {
     submitGuessRequestBody = new SubmitGuessRequestBody();
     user = new User();
     game = new Game();
-    wordOfTheDay = new WordOfTheDay();
-
+  }
+  public UserService(){
 
   }
-
   /**
    * create user method class.
    */

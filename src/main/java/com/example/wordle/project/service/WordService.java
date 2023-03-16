@@ -4,7 +4,6 @@ import com.example.wordle.project.model.Game;
 import com.example.wordle.project.model.WordOfTheDay;
 import com.example.wordle.project.repository.UserRepository;
 import com.example.wordle.project.repository.WordOfTheDayRepository;
-import com.example.wordle.project.requestbody.WordOfTheDayRequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +34,10 @@ public class WordService {
    * create wordOfTheDay method class.
    */
   public WordOfTheDay createWord(WordOfTheDay wordOfTheDay) {
-    wordOfTheDayRepository.insert(wordOfTheDay);
+    WordOfTheDay wordsToday = new WordOfTheDay();
+    wordsToday.setWordOfTheDay(wordOfTheDay.getWordOfTheDay());
+    wordsToday.setDate(LocalDate.parse(wordOfTheDay.getDate().toString()));
+    wordOfTheDayRepository.insert(wordsToday);
     return wordOfTheDay;
   }
 

@@ -1,6 +1,5 @@
 package com.example.wordle.project.controller;
 
-import com.example.wordle.project.model.User;
 import com.example.wordle.project.model.WordOfTheDay;
 import com.example.wordle.project.repository.WordOfTheDayRepository;
 import com.example.wordle.project.service.WordService;
@@ -10,7 +9,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -70,7 +68,7 @@ public class WordControllerTest {
         WordOfTheDay mockWordOfTheDay = new WordOfTheDay();
         mockWordOfTheDay.setWordOfTheDay("MAGIC");
         mockWordOfTheDay.setDate(LocalDate.of(2023,2,28));
-        given(wordService.createWord(Mockito.any())).willReturn(new WordOfTheDay("MAGIC", LocalDate.of(2023,2,28)));
+        given(wordService.createWord(wordOfTheDay)).willReturn(new WordOfTheDay("MAGIC", LocalDate.of(2023,2,28)));
         //action I will be testing
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/word/createWordOfTheDay")

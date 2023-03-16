@@ -13,6 +13,7 @@ public class WordOfTheDay {
 
   @Field(name = "wordOfTheDay")
   public String wordOfTheDay;
+
   @Field(name = "date")
   @JsonFormat(pattern = "yyyy-MM-dd")
   public LocalDate date;
